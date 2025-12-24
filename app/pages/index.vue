@@ -4,11 +4,11 @@
     <h1>Click Aris!</h1>
     <p>Click the Aris head to collect more Aris!</p>
     <div class="centered-content">
-      <button @click="arisClick()">
+      <button @pointerdown="arisClickDown()" @click.stop="arisClickUp()">
         <img src="/images/arishead.png" class="image arishead" />
       </button>
     </div>
-    <p class="cakeAmount">{{ cakes }}</p>
+    <p :class="cakeAmountText">{{ cakes }}</p>
   </div>
 </template>
 
@@ -16,8 +16,16 @@
 import { ref } from "vue";
 let cakes = ref(0);
 
-function arisClick() {
+let cakeAmountText = ref("cakeAmount");
+
+function arisClickDown() {
   cakes.value += 1;
+  cakeAmountText.value = "cakeAmount clickedText";
+  console.log(cakeAmountText.value);
+}
+function arisClickUp() {
+  console.log("hello?");
+  cakeAmountText.value = "cakeAmount";
 }
 </script>
 
@@ -32,6 +40,12 @@ function arisClick() {
 }
 .cakeAmount {
   text-align: center;
+  transition: 0.1s ease-in;
+}
+.clickedText {
+  color: rgb(84, 179, 227);
+  transition: 0.1s ease-out;
+  transform: scale(1.2);
 }
 .arishead {
   height: 40vw;
