@@ -2,24 +2,52 @@
   <div class="main">
     <img src="/images/banner.JPG" class="banner" />
     <h1>Click Aris!</h1>
-    <p>
-      Hello, Aris! I need some more sample text in here, but I dont want to use
-      lorem ipsum. But when will it wrap???? When will it warp? I mean when will
-      it rap?
-    </p>
-    <p>{{ cakes }}</p>
+    <p>Click the Aris head to collect more Aris!</p>
+    <div class="centered-content">
+      <button @click="arisClick()">
+        <img src="/images/arishead.png" class="image arishead" />
+      </button>
+    </div>
+    <p class="cakeAmount">{{ cakes }}</p>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 let cakes = ref(0);
+
+function arisClick() {
+  cakes.value += 1;
+}
 </script>
 
 <style scoped>
 .banner {
   width: 100%;
-  height: 160px;
+  height: 14vw;
   padding: 0px;
+}
+.cakeAmount {
+  text-align: center;
+}
+.arishead {
+  width: auto;
+  height: 20vw;
+  transition: 0.2s ease-out;
+}
+.arishead:hover {
+  transform: scale(1.05);
+  transition: 0.1s ease-out;
+}
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+button {
+  width: 40%;
+  background-color: transparent;
+  border: none;
 }
 </style>
