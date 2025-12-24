@@ -23,16 +23,21 @@ function arisClick() {
 
 <style scoped>
 .banner {
-  width: 100%;
-  height: 14vw;
+  width: 100vw;
+  height: 18vw;
+  min-height: 120px;
+
   padding: 0px;
+  margin: 0px;
 }
 .cakeAmount {
   text-align: center;
 }
 .arishead {
-  width: auto;
-  height: 20vw;
+  height: 40vw;
+  max-height: 300px;
+
+  padding: 2px;
   transition: 0.2s ease-out;
 }
 .arishead:hover {
@@ -44,6 +49,7 @@ function arisClick() {
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: 100%;
 }
 button {
   width: 40%;

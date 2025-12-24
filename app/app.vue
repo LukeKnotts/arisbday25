@@ -6,21 +6,15 @@
 
 <style>
 h1 {
-  font-size: 2vw;
+  font-size: 30px;
+  margin: 5px;
 }
 p {
-  font-size: 1.5vw;
+  font-size: 22px;
+  margin: 5px;
 }
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: left;
-
-  margin-left: 10%;
-  margin-right: 10%;
-}
-img {
-  width: 100%;
+  margin: 0px;
+  padding: 0px;
 }
 </style>
