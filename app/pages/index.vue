@@ -7,6 +7,7 @@
       it rap?
     </p>
     <p>{{ cakes }}</p>
+    <p>Test adding a new paragraph!</p>
   </div>
 </template>
 
