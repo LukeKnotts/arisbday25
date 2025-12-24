@@ -39,9 +39,11 @@ function arisClick() {
 
   padding: 2px;
   transition: 0.2s ease-out;
+
+  outline: none;
 }
 .arishead:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
   transition: 0.1s ease-out;
 }
 .centered-content {
@@ -55,11 +57,10 @@ button {
   width: 40%;
   background-color: transparent;
   border: none;
-  transition: 0.2s ease-out;
+  transition: transform 0.2s ease-in-out;
 }
 button:active {
   background-color: transparent;
-  transform: rotate(5deg);
-  transition: 0.2s ease-out;
+  transform: rotate(5deg) scale(1.02);
 }
 </style>
