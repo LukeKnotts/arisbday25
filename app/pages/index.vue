@@ -55,5 +55,11 @@ button {
   width: 40%;
   background-color: transparent;
   border: none;
+  transition: 0.2s ease-out;
+}
+button:active {
+  background-color: transparent;
+  transform: rotate(5deg);
+  transition: 0.2s ease-out;
 }
 </style>
