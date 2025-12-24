@@ -5,6 +5,12 @@
 </template>
 
 <style>
+/* Disable doubel tap to zoom for mobile devices **/
+* {
+  touch-action: manipulation;
+}
+
+/* STYLES */
 h1 {
   font-size: 30px;
   margin: 5px;
