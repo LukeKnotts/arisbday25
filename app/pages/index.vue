@@ -151,7 +151,7 @@
 
     <!-- ---------------------------------------------------------------------- -->
     <!-- SUPER SECRET CHEAT ABILITY (toggle the 'hidden' class before push to main)-->
-    <div class="hidd">
+    <div class="hidden">
       <button
         @click="
           () => {
