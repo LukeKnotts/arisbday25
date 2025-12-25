@@ -4,6 +4,7 @@
     <h1>Click Aris!</h1>
     <p>Click the Aris head to collect more Aris!</p>
 
+    <!-- Aris' Head -->
     <div class="centered-content">
       <button
         @pointerdown="
@@ -12,82 +13,99 @@
             yayFXstart(headAmountClass);
           }
         "
-        @click.stop="removeFX(headAmountClass)"
+        @click.stop="removeClasses(headAmountClass)"
         class="headbutton"
       >
         <img src="/images/arishead.png" class="arishead" />
       </button>
     </div>
     <br />
-    <p :class="headAmountClass">{{ cakes }}</p>
+    <div class="headAmount">
+      <p :class="headAmountClass">{{ HEADS }}</p>
+    </div>
+
     <hr />
 
-    <div>
-      <!-- "uClickClass"   Upgrade Clicking Power -->
-      <div class="centered-content">
-        <p>Clicking power:</p>
-        <p :class="uClickClass">{{ clickPower }} &nbsp;</p>
-        <button
-          @pointerdown="
-            () => {
-              upgradeClickPower();
-            }
-          "
-          @click.stop="
-            () => {
-              removeFX(uClickClass);
-              removeFX(headAmountClass);
-            }
-          "
-        >
-          Upgrade [{{ clickUCost }}]
-        </button>
-      </div>
+    <!-- Clicking Power -->
+    <div class="centered-content">
+      <p>Clicking power:</p>
+      <p :class="clickPowerClass">{{ CLICKPOWER }} &nbsp;</p>
+      <button
+        @pointerdown="
+          upgradeClickPower(
+            purchase(clickUCost, clickPowerClass, clickPriceClass)
+          )
+        "
+        @click.stop="
+          () => {
+            removeClasses(clickPowerClass, clickPriceClass, headAmountClass);
+          }
+        "
+      >
+        Upgrade [<span :class="clickPriceClass">{{ clickUCost }}</span
+        >]
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
+// imports
 import { ref } from "vue";
-let cakes = ref(0);
 
-let uClickClass = ref(["clickUButton"]);
+// amount of 'currency' the player has
+let HEADS = ref(0);
 
 // Clicking Effects
+function removeClasses(...targets) {
+  targets.forEach((target) => {
+    target.length = 0;
+  });
+}
+
+// Click Effects
 function yayFXstart(ele) {
   ele.push("yayText");
 }
 function sadFXstart(ele) {
   ele.push("sadText");
 }
-function removeFX(ele) {
-  ele.pop();
-}
 
 // Aris Head
-let headAmountClass = ref(["cakeAmount"]);
-
+let headAmountClass = ref([]);
 function headClickDown() {
-  cakes.value += clickPower.value;
+  HEADS.value += CLICKPOWER.value;
 }
 
-// Upgrade Click power
-let clickPower = ref(1);
-let clickUCost = computed(() => {
-  return 30 * 2 ** clickPower.value - 30;
-});
-function upgradeClickPower() {
-  if (cakes.value >= clickUCost.value) {
-    // subtract money first, otherwise clickUCost is updated to new price
-    cakes.value -= clickUCost.value;
-    clickPower.value += 1;
-    yayFXstart(uClickClass.value);
+// Purchase function
+//      quantityClass is how many of the purchased you currently have
+function purchase(cost, quantityClass, priceClass) {
+  if (cost > HEADS.value) {
+    sadFXstart(priceClass);
     sadFXstart(headAmountClass.value);
+    return false;
   } else {
-    sadFXstart(uClickClass.value);
+    yayFXstart(quantityClass);
     sadFXstart(headAmountClass.value);
+    return true;
   }
 }
+
+// Upgrade Click Power
+let CLICKPOWER = ref(1);
+let clickUCost = computed(() => {
+  return 30 * 2 ** CLICKPOWER.value - 30;
+});
+function upgradeClickPower(bool) {
+  if (bool) {
+    // subtract money first, otherwise clickUCost is updated to new price
+    HEADS.value -= clickUCost.value;
+    CLICKPOWER.value += 1;
+  }
+}
+//      Click Power styles
+let clickPowerClass = ref([]);
+let clickPriceClass = ref([]);
 </script>
 
 <style scoped>
@@ -107,8 +125,8 @@ function upgradeClickPower() {
   text-align: center;
   width: 100%;
 }
-/* Cake Amount */
-.cakeAmount {
+/* Head Amount */
+.headAmount {
   text-align: center;
   transition: 0.1s ease-in;
 }
