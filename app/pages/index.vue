@@ -53,7 +53,54 @@
 
     <!-- Sulfur5 -->
     <div :class="level2">
-      <div class="centered-content"><p>Sulfur5!</p></div>
+      <div class="centered-content">
+        <p>Sulfur5!</p>
+        <p :class="sulfurCountClass">{{ SULFURS }} &nbsp;</p>
+        <button
+          @pointerdown="
+            buySulfur(
+              purchase(
+                HEADS,
+                headAmountClass,
+                sulfurCost,
+                sulfurCountClass,
+                sulfurPriceClass
+              )
+            )
+          "
+          @click.stop="
+            removeClasses(sulfurCountClass, sulfurPriceClass, headAmountClass)
+          "
+        >
+          Buy! [<span :class="sulfurPriceClass">{{ sulfurCost }}</span
+          >]
+        </button>
+        <br />
+      </div>
+      <div style="display: flex; flex-wrap: nowrap; overflow-x: auto">
+        <div
+          class="nowrap"
+          v-for="sulfurImg in sulfurImages"
+          :key="sulfurImg.id"
+        >
+          <img :src="sulfurImg.src" class="sulfur" />
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- SUPER SECRET CHEAT ABILITY -->
+    <div class="hidden">
+      <button
+        @click="
+          () => {
+            HEADS += 1000;
+          }
+        "
+      >
+        Cheat!
+      </button>
     </div>
   </div>
 </template>
@@ -131,6 +178,31 @@ function upgradeClickPower(bool) {
 //      Click Power styles
 let clickPowerClass = ref([]);
 let clickPriceClass = ref([]);
+
+// Buy a Sulfur5
+let SULFURS = ref(0);
+let sulfurCost = computed(() => {
+  return Math.round(1000 * (3 / 2) ** SULFURS.value);
+});
+function buySulfur(bool) {
+  if (bool) {
+    // subtr money first, otherwise price changes too
+    HEADS.value -= sulfurCost.value;
+    SULFURS.value += 1;
+    newSulfur();
+  }
+}
+function newSulfur() {
+  sulfurImages.value.push({ id: SULFURS.value, src: "/images/sulfur5.png" });
+  setInterval(() => {
+    HEADS.value += 10;
+  }, 1000);
+}
+//     Sulfur styles
+let sulfurCountClass = ref([]);
+let sulfurPriceClass = ref([]);
+//     Sulfur Images
+let sulfurImages = ref([]);
 </script>
 
 <style scoped>
@@ -149,6 +221,9 @@ let clickPriceClass = ref([]);
   align-items: center;
   text-align: center;
   width: 100%;
+}
+.nowrap {
+  white-space: nowrap;
 }
 /* cosemetic style to tilt the word 'aris' */
 .arisTilt:hover {
@@ -199,5 +274,10 @@ let clickPriceClass = ref([]);
 .headbutton:active {
   background-color: transparent;
   transform: rotate(5deg) scale(1.02);
+}
+/* Sulfur */
+.sulfur {
+  display: inline-block;
+  height: 40vw;
 }
 </style>
