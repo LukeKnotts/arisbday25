@@ -1,5 +1,7 @@
 <template>
   <div class="main">
+    <!-- ---------------------------------------------------------------------- -->
+    <!-- Intro Text -->
     <img src="/images/banner.JPG" class="banner" />
     <h1>Click <span class="arisTilt">Aris!</span></h1>
     <p>
@@ -7,6 +9,7 @@
       <span class="arisTilt">Aris!</span>
     </p>
 
+    <!-- ---------------------------------------------------------------------- -->
     <!-- Aris' Head -->
     <div class="centered-content">
       <button
@@ -24,6 +27,7 @@
 
     <hr />
 
+    <!-- ---------------------------------------------------------------------- -->
     <!-- Clicking Power -->
     <div class="centered-content">
       <p>Clicking power:</p>
@@ -52,6 +56,7 @@
 
     <hr />
 
+    <!-- ---------------------------------------------------------------------- -->
     <!-- Sulfur5 -->
     <div :class="level2">
       <div class="centered-content">
@@ -94,6 +99,7 @@
 
     <hr :class="level2" />
 
+    <!-- ---------------------------------------------------------------------- -->
     <!-- COUNTRY -->
     <div :class="level3">
       <div class="centered-content">
@@ -143,6 +149,7 @@
 
     <hr :class="level3" />
 
+    <!-- ---------------------------------------------------------------------- -->
     <!-- SUPER SECRET CHEAT ABILITY (toggle the 'hidden' class before push to main)-->
     <div class="hidd">
       <button
