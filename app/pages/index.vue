@@ -1,18 +1,16 @@
 <template>
   <div class="main">
     <img src="/images/banner.JPG" class="banner" />
-    <h1>Click Aris!</h1>
-    <p>Click the Aris head to collect more Aris!</p>
+    <h1>Click <span class="arisTilt">Aris!</span></h1>
+    <p>
+      Click the <span class="arisTilt">Aris</span> head to collect more
+      <span class="arisTilt">Aris!</span>
+    </p>
 
     <!-- Aris' Head -->
     <div class="centered-content">
       <button
-        @pointerdown="
-          () => {
-            headClickDown();
-            yayFXstart(headAmountClass);
-          }
-        "
+        @pointerdown="clickAris()"
         @click.stop="removeClasses(headAmountClass)"
         class="headbutton"
       >
@@ -33,27 +31,30 @@
       <button
         @pointerdown="
           upgradeClickPower(
-            purchase(clickUCost, clickPowerClass, clickPriceClass)
+            purchase(HEADS, clickUCost, clickPowerClass, clickPriceClass)
           )
         "
         @click.stop="
-          () => {
-            removeClasses(clickPowerClass, clickPriceClass, headAmountClass);
-          }
+          removeClasses(clickPowerClass, clickPriceClass, headAmountClass)
         "
       >
         Upgrade [<span :class="clickPriceClass">{{ clickUCost }}</span
         >]
       </button>
     </div>
+
+    <hr />
+
+    <!-- Sulfur5 -->
+    <div :class="level2"><p>Level 2!</p></div>
   </div>
 </template>
 
 <script setup>
 // imports
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
-// amount of 'currency' the player has
+// amount of main currency the player has
 let HEADS = ref(0);
 
 // Clicking Effects
@@ -76,20 +77,36 @@ let headAmountClass = ref([]);
 function headClickDown() {
   HEADS.value += CLICKPOWER.value;
 }
+function clickAris() {
+  headClickDown();
+  yayFXstart(headAmountClass.value);
+}
 
 // Purchase function
 //      quantityClass is how many of the purchased you currently have
-function purchase(cost, quantityClass, priceClass) {
-  if (cost > HEADS.value) {
+function purchase(currency, cost, quantityClass, priceClass) {
+  // if you cant afford it
+  if (cost > currency) {
     sadFXstart(priceClass);
     sadFXstart(headAmountClass.value);
     return false;
+    // if you can afford it
   } else {
     yayFXstart(quantityClass);
     sadFXstart(headAmountClass.value);
     return true;
   }
 }
+
+// Level 2
+//      Hides content until you get 200 HEADS.
+let level2 = ref("hidden");
+
+watch(HEADS, (newValue, oldValue) => {
+  if (newValue >= 200) {
+    level2.value = "";
+  }
+});
 
 // Upgrade Click Power
 let CLICKPOWER = ref(1);
@@ -124,6 +141,16 @@ let clickPriceClass = ref([]);
   align-items: center;
   text-align: center;
   width: 100%;
+}
+/* cosemetic style to tilt the word 'aris' */
+.arisTilt:hover {
+  display: inline-block;
+  transition: 0.1s ease-in-out;
+  transform: rotate(5deg);
+}
+/* Level Conent Hiding*/
+.hidden {
+  display: none;
 }
 /* Head Amount */
 .headAmount {
