@@ -92,9 +92,58 @@
       </div>
     </div>
 
-    <hr />
+    <hr :class="level2" />
 
-    <!-- SUPER SECRET CHEAT ABILITY -->
+    <!-- COUNTRY -->
+    <div :class="level3">
+      <div class="centered-content">
+        <p>Road Country:</p>
+        <p :class="countryCountClass">
+          {{ COUNTRIES.toLocaleString() }} &nbsp;
+        </p>
+        <button
+          @pointerdown="
+            buyCountry(
+              purchase(
+                SULFURS,
+                sulfurCountClass,
+                countryCost,
+                countryCountClass,
+                countryPriceClass
+              )
+            )
+          "
+          @click.stop="
+            removeClasses(
+              countryCountClass,
+              countryPriceClass,
+              sulfurCountClass
+            )
+          "
+        >
+          Buy!&ensp;&nbsp;[
+          <span :class="countryPriceClass">
+            {{ countryCost.toLocaleString() }}</span
+          >
+          ]
+        </button>
+        <p>(sulfurs)</p>
+        <br />
+      </div>
+      <div style="display: flex; flex-wrap: nowrap; overflow-x: auto">
+        <div
+          class="nowrap"
+          v-for="countryImg in countryImages"
+          :key="countryImg.id"
+        >
+          <img :src="countryImg.src" class="country" />
+        </div>
+      </div>
+    </div>
+
+    <hr :class="level3" />
+
+    <!-- SUPER SECRET CHEAT ABILITY (toggle the 'hidden' class before push to main)-->
     <div class="hidden">
       <button
         @click="
@@ -166,6 +215,14 @@ watch(HEADS, (newValue, oldValue) => {
     level2.value = "";
   }
 });
+// Level 3
+//      Hides content until you get 1500 HEADS.
+let level3 = ref("hidden");
+watch(HEADS, (newValue, oldValue) => {
+  if (newValue >= 1500) {
+    level3.value = "";
+  }
+});
 
 // Upgrade Click Power
 let CLICKPOWER = ref(1);
@@ -198,15 +255,68 @@ function buySulfur(bool) {
 }
 function newSulfur() {
   sulfurImages.value.push({ id: SULFURS.value, src: "/images/sulfur5.png" });
-  setInterval(() => {
-    HEADS.value += 10;
-  }, 1000);
+  // watch amount of sulfurs to spend em if player buys countries.
+  watchSulfur(
+    setInterval(() => {
+      HEADS.value += 10;
+    }, 1000),
+    SULFURS.value
+  );
 }
 //     Sulfur styles
 let sulfurCountClass = ref([]);
 let sulfurPriceClass = ref([]);
 //     Sulfur Images
 let sulfurImages = ref([]);
+
+// Buy a Country
+let COUNTRIES = ref(0);
+let countryCost = computed(() => {
+  return 1 + COUNTRIES.value;
+});
+// use oldCost to save country price for when we need to calculate amount of sulfurs to spend
+let oldCountryCost = 0;
+function buyCountry(bool) {
+  if (bool) {
+    // subtr money first, otherwise price changes too!
+    SULFURS.value -= countryCost.value;
+    // before you change the price, save the old one so we can know which sulfurs to spend under watchSulfur().
+    oldCountryCost = countryCost.value;
+    // make new country first so you can watch the COUNTRIES variable
+    newCountry();
+    COUNTRIES.value += 1;
+    setInterval(() => {
+      HEADS.value += 500;
+    }, 1000);
+  }
+}
+function newCountry() {
+  countryImages.value.push({
+    id: COUNTRIES.value,
+    src: "/images/roadcountry.jpg",
+  });
+}
+// function to remove spent sulfurs
+function watchSulfur(sulfurLoop, currentSulfur) {
+  // watch if countries value changes (assuming it increases right now)
+  watch(
+    COUNTRIES,
+    (newValue, oldValue) => {
+      // look if old purchase amount should spend the current sulfur
+      if (oldCountryCost >= currentSulfur) {
+        console.log("hello");
+        clearInterval(sulfurLoop);
+        sulfurImages.value.pop();
+      }
+    },
+    { once: true }
+  );
+}
+// Country styles
+let countryCountClass = ref([]);
+let countryPriceClass = ref([]);
+// Country Images
+let countryImages = ref([]);
 </script>
 
 <style scoped>
@@ -284,5 +394,12 @@ let sulfurImages = ref([]);
   display: inline-block;
   height: 40vw;
   max-height: 300px;
+}
+/* Country */
+.country {
+  display: inline-block;
+  height: 38vw;
+  max-height: 290px;
+  padding: 5px;
 }
 </style>
