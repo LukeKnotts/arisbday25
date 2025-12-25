@@ -46,7 +46,23 @@
     <hr />
 
     <!-- Sulfur5 -->
-    <div :class="level2"><p>Level 2!</p></div>
+    <div :class="level2">
+      <div class="centered-content">
+        <button
+          @pointerdown="
+            upgradeClickPower(
+              purchase(HEADS, clickUCost, clickPowerClass, clickPriceClass)
+            )
+          "
+          @click.stop="
+            removeClasses(clickPowerClass, clickPriceClass, headAmountClass)
+          "
+        >
+          Upgrade [<span :class="clickPriceClass">{{ clickUCost }}</span
+          >]
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 

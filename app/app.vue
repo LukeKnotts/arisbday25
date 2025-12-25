@@ -18,18 +18,25 @@
 }
 
 /* STYLES */
+:root {
+  --font-size: 22px;
+  --heading-size: 30px;
+}
 h1 {
-  font-size: 30px;
+  font-size: var(--heading-size);
   margin: 5px;
   margin-left: 15px;
 }
 p {
-  font-size: 22px;
+  font-size: var(--font-size);
   margin: 5px;
   margin-left: 15px;
 }
 body {
   margin: 0px;
   padding: 0px;
+}
+button {
+  font-size: calc(var(--font-size) - 2);
 }
 </style>
