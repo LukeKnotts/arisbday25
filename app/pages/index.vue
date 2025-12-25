@@ -144,11 +144,11 @@
     <hr :class="level3" />
 
     <!-- SUPER SECRET CHEAT ABILITY (toggle the 'hidden' class before push to main)-->
-    <div class="hidden">
+    <div class="hidd">
       <button
         @click="
           () => {
-            HEADS += 1000;
+            HEADS += 10000;
           }
         "
       >
@@ -159,13 +159,17 @@
 </template>
 
 <script setup>
+// ----------------------------------------------------------------
 // imports
+//-----------------------------------------------------------------
 import { ref, watch } from "vue";
 
 // amount of main currency the player has
 let HEADS = ref(0);
 
+// ----------------------------------------------------------------
 // Clicking Effects
+//-----------------------------------------------------------------
 function removeClasses(...targets) {
   targets.forEach((target) => {
     target.length = 0;
@@ -180,7 +184,9 @@ function sadFXstart(ele) {
   ele.push("sadText");
 }
 
+// ----------------------------------------------------------------
 // Aris Head
+//-----------------------------------------------------------------
 let headAmountClass = ref([]);
 function headClickDown() {
   HEADS.value += CLICKPOWER.value;
@@ -190,7 +196,9 @@ function clickAris() {
   yayFXstart(headAmountClass.value);
 }
 
+// ----------------------------------------------------------------
 // Purchase function
+//-----------------------------------------------------------------
 //      quantityClass is how many of the purchased you currently have
 function purchase(currency, currencyClass, cost, quantityClass, priceClass) {
   // if you cant afford it
@@ -206,7 +214,9 @@ function purchase(currency, currencyClass, cost, quantityClass, priceClass) {
   }
 }
 
+// ----------------------------------------------------------------
 // Level 2
+//-----------------------------------------------------------------
 //      Hides content until you get 200 HEADS.
 let level2 = ref("hidden");
 
@@ -215,7 +225,10 @@ watch(HEADS, (newValue, oldValue) => {
     level2.value = "";
   }
 });
+
+// ----------------------------------------------------------------
 // Level 3
+//-----------------------------------------------------------------
 //      Hides content until you get 1500 HEADS.
 let level3 = ref("hidden");
 watch(HEADS, (newValue, oldValue) => {
@@ -224,7 +237,9 @@ watch(HEADS, (newValue, oldValue) => {
   }
 });
 
+// ----------------------------------------------------------------
 // Upgrade Click Power
+//-----------------------------------------------------------------
 let CLICKPOWER = ref(1);
 let clickUCost = computed(() => {
   return 30 * 2 ** CLICKPOWER.value - 30;
@@ -240,8 +255,11 @@ function upgradeClickPower(bool) {
 let clickPowerClass = ref([]);
 let clickPriceClass = ref([]);
 
-// Buy a Sulfur5
+// ----------------------------------------------------------------
+// Sulfur5
+//-----------------------------------------------------------------
 let SULFURS = ref(0);
+let sulfurLoops = ref([]);
 let sulfurCost = computed(() => {
   return Math.round(1000 * (3 / 2) ** SULFURS.value);
 });
@@ -256,33 +274,41 @@ function buySulfur(bool) {
 function newSulfur() {
   sulfurImages.value.push({ id: SULFURS.value, src: "/images/sulfur5.png" });
   // watch amount of sulfurs to spend em if player buys countries.
-  watchSulfur(
+  sulfurLoops.value.push(
     setInterval(() => {
       HEADS.value += 10;
-    }, 1000),
-    SULFURS.value
+    }, 1000)
   );
+  console.log("made a new sulfur");
 }
+// function to remove sulfur loops and images if amount changes; run it right away to always monitor sulfur count.
+function watchSulfurs() {
+  watch(SULFURS, (newValue, oldValue) => {
+    while (sulfurLoops.value.length > SULFURS.value) {
+      console.log("losing sulfur!");
+      clearInterval(sulfurLoops.value.pop());
+      sulfurImages.value.pop();
+    }
+  });
+}
+watchSulfurs();
 //     Sulfur styles
 let sulfurCountClass = ref([]);
 let sulfurPriceClass = ref([]);
 //     Sulfur Images
 let sulfurImages = ref([]);
 
-// Buy a Country
+// ----------------------------------------------------------------
+// Road Country
+//-----------------------------------------------------------------
 let COUNTRIES = ref(0);
 let countryCost = computed(() => {
   return 1 + COUNTRIES.value;
 });
-// use oldCost to save country price for when we need to calculate amount of sulfurs to spend
-let oldCountryCost = 0;
 function buyCountry(bool) {
   if (bool) {
     // subtr money first, otherwise price changes too!
     SULFURS.value -= countryCost.value;
-    // before you change the price, save the old one so we can know which sulfurs to spend under watchSulfur().
-    oldCountryCost = countryCost.value;
-    // make new country first so you can watch the COUNTRIES variable
     newCountry();
     COUNTRIES.value += 1;
     setInterval(() => {
@@ -295,22 +321,6 @@ function newCountry() {
     id: COUNTRIES.value,
     src: "/images/roadcountry.jpg",
   });
-}
-// function to remove spent sulfurs
-function watchSulfur(sulfurLoop, currentSulfur) {
-  // watch if countries value changes (assuming it increases right now)
-  watch(
-    COUNTRIES,
-    (newValue, oldValue) => {
-      // look if old purchase amount should spend the current sulfur
-      if (oldCountryCost >= currentSulfur) {
-        console.log("hello");
-        clearInterval(sulfurLoop);
-        sulfurImages.value.pop();
-      }
-    },
-    { once: true }
-  );
 }
 // Country styles
 let countryCountClass = ref([]);
