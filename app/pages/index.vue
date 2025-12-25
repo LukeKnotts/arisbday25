@@ -19,7 +19,7 @@
     </div>
     <br />
     <div class="headAmount">
-      <p :class="headAmountClass">{{ HEADS }}</p>
+      <p :class="headAmountClass">{{ HEADS.toLocaleString() }}</p>
     </div>
 
     <hr />
@@ -27,7 +27,7 @@
     <!-- Clicking Power -->
     <div class="centered-content">
       <p>Clicking power:</p>
-      <p :class="clickPowerClass">{{ CLICKPOWER }} &nbsp;</p>
+      <p :class="clickPowerClass">{{ CLICKPOWER.toLocaleString() }} &nbsp;</p>
       <button
         @pointerdown="
           upgradeClickPower(
@@ -44,8 +44,9 @@
           removeClasses(clickPowerClass, clickPriceClass, headAmountClass)
         "
       >
-        Upgrade [<span :class="clickPriceClass">{{ clickUCost }}</span
-        >]
+        Upgrade&ensp;&nbsp;[
+        <span :class="clickPriceClass">{{ clickUCost.toLocaleString() }}</span>
+        ]
       </button>
     </div>
 
@@ -55,7 +56,7 @@
     <div :class="level2">
       <div class="centered-content">
         <p>Sulfur5!</p>
-        <p :class="sulfurCountClass">{{ SULFURS }} &nbsp;</p>
+        <p :class="sulfurCountClass">{{ SULFURS.toLocaleString() }} &nbsp;</p>
         <button
           @pointerdown="
             buySulfur(
@@ -72,8 +73,11 @@
             removeClasses(sulfurCountClass, sulfurPriceClass, headAmountClass)
           "
         >
-          Buy! [<span :class="sulfurPriceClass">{{ sulfurCost }}</span
-          >]
+          Buy!&ensp;&nbsp;[
+          <span :class="sulfurPriceClass">{{
+            sulfurCost.toLocaleString()
+          }}</span>
+          ]
         </button>
         <br />
       </div>
@@ -279,5 +283,6 @@ let sulfurImages = ref([]);
 .sulfur {
   display: inline-block;
   height: 40vw;
+  max-height: 300px;
 }
 </style>
