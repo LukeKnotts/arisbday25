@@ -19,6 +19,7 @@
 
 /* STYLES */
 :root {
+  /* CSS variables so I can standardize font size and stuff. */
   --font-size: 22px;
   --heading-size: 30px;
 }

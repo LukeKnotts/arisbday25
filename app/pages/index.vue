@@ -31,7 +31,13 @@
       <button
         @pointerdown="
           upgradeClickPower(
-            purchase(HEADS, clickUCost, clickPowerClass, clickPriceClass)
+            purchase(
+              HEADS,
+              headAmountClass,
+              clickUCost,
+              clickPowerClass,
+              clickPriceClass
+            )
           )
         "
         @click.stop="
@@ -47,21 +53,7 @@
 
     <!-- Sulfur5 -->
     <div :class="level2">
-      <div class="centered-content">
-        <button
-          @pointerdown="
-            upgradeClickPower(
-              purchase(HEADS, clickUCost, clickPowerClass, clickPriceClass)
-            )
-          "
-          @click.stop="
-            removeClasses(clickPowerClass, clickPriceClass, headAmountClass)
-          "
-        >
-          Upgrade [<span :class="clickPriceClass">{{ clickUCost }}</span
-          >]
-        </button>
-      </div>
+      <div class="centered-content"><p>Sulfur5!</p></div>
     </div>
   </div>
 </template>
@@ -100,16 +92,16 @@ function clickAris() {
 
 // Purchase function
 //      quantityClass is how many of the purchased you currently have
-function purchase(currency, cost, quantityClass, priceClass) {
+function purchase(currency, currencyClass, cost, quantityClass, priceClass) {
   // if you cant afford it
   if (cost > currency) {
     sadFXstart(priceClass);
-    sadFXstart(headAmountClass.value);
+    sadFXstart(currencyClass);
     return false;
     // if you can afford it
   } else {
     yayFXstart(quantityClass);
-    sadFXstart(headAmountClass.value);
+    sadFXstart(currencyClass);
     return true;
   }
 }
