@@ -150,6 +150,17 @@
     <hr :class="level3" />
 
     <!-- ---------------------------------------------------------------------- -->
+    <!-- CREDITS -->
+
+    <div :class="credits">
+      <p>
+        Thank you for playing my game! A happy birthday to Aris, and a goodnight
+        to all!
+      </p>
+      <p>-Luke Knotts</p>
+    </div>
+
+    <!-- ---------------------------------------------------------------------- -->
     <!-- SUPER SECRET CHEAT ABILITY (toggle the 'hidden' class before push to main)-->
     <div class="hidden">
       <button
@@ -241,6 +252,17 @@ let level3 = ref("hidden");
 watch(HEADS, (newValue, oldValue) => {
   if (newValue >= 1500) {
     level3.value = "";
+  }
+});
+
+// ----------------------------------------------------------------
+// Level CREDITS
+//-----------------------------------------------------------------
+//      Hides content until you get 1500 HEADS.
+let credits = ref("hidden");
+watch(HEADS, (newValue, oldValue) => {
+  if (newValue >= 100000) {
+    credits.value = "";
   }
 });
 
